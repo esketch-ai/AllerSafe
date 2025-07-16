@@ -1,0 +1,46 @@
+// tsconfig.json
+
+{
+  "compilerOptions": {
+    // TypeScript 컴파일 대상을 ES2017로 설정합니다.
+    "target": "ES2017",
+    // 컴파일에 포함될 라이브러리 파일을 설정합니다.
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // JavaScript 파일도 컴파일에 포함시킵니다.
+    "allowJs": true,
+    // 기본 라이브러리 파일의 타입 체크를 건너뜁니다.
+    "skipLibCheck": true,
+    // 모든 엄격한 타입 체크 옵션을 활성화합니다.
+    "strict": true,
+    // 컴파일된 파일을 출력하지 않습니다.
+    "noEmit": true,
+    // CommonJS 모듈과 ES 모듈 간의 상호 운용성을 활성화합니다.
+    "esModuleInterop": true,
+    // 모듈 시스템을 'esnext'로 설정합니다.
+    "module": "esnext",
+    // 모듈 해석 전략을 'bundler'로 설정합니다.
+    "moduleResolution": "bundler",
+    // JSON 파일을 모듈처럼 가져올 수 있도록 허용합니다.
+    "resolveJsonModule": true,
+    // 각 파일을 독립된 모듈로 처리합니다.
+    "isolatedModules": true,
+    // JSX 코드 생성을 'preserve'로 설정하여 변환하지 않고 유지합니다.
+    "jsx": "preserve",
+    // 증분 컴파일을 활성화합니다.
+    "incremental": true,
+    // Next.js 관련 플러그인을 설정합니다.
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    // 경로 별칭을 설정합니다.
+    "paths": {
+      "@/*": ["./*"],
+    }
+  },
+  // 컴파일에 포함될 파일 및 디렉토리를 설정합니다.
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  // 컴파일에서 제외할 파일 및 디렉토리를 설정합니다.
+  "exclude": ["node_modules"]
+}
