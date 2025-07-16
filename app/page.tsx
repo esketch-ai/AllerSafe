@@ -1,25 +1,20 @@
 
-"""// app/page.tsx
+"""'use client';
 
-'use client'; // 이 파일이 클라이언트 측에서 렌더링되도록 설정합니다.
-
-// Next.js의 Link 컴포넌트를 가져옵니다.
 import Link from 'next/link';
-// 상단 네비게이션 컴포넌트를 가져옵니다.
 import TopNav from '@/components/TopNav';
-// 하단 네비게이션 컴포넌트를 가져옵니다.
 import BottomNav from '@/components/BottomNav';
+import { useProfile } from '@/contexts/ProfileContext';
 
-// 홈 페이지 컴포넌트
 export default function Home() {
-  // 알레르기 통계 데이터를 정의합니다.
+  const { profiles, selectedProfiles, toggleProfileSelection } = useProfile();
+
   const allergyStats = [
     { name: '안전', count: 234, color: 'bg-green-500', desc: '섭취 가능한 제품' },
     { name: '주의', count: 12, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
     { name: '위험', count: 3, color: 'bg-red-500', desc: '섭취 금지 제품' },
   ];
 
-  // 빠른 실행 액션 데이터를 정의합니다.
   const quickActions = [
     { 
       icon: 'ri-scan-line', 
@@ -51,22 +46,38 @@ export default function Home() {
     },
   ];
 
+  const selectedProfileNames = selectedProfiles.map(id => profiles.find(p => p.id === id)?.name).filter(Boolean).join(', ');
+
   return (
-    // 전체 화면을 차지하고 하단 네비게이션 공간을 확보합니다.
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* 상단 네비게이션을 렌더링합니다. */}
       <TopNav title="AllerSafe" showMenu={true} />
       
-      {/* 메인 콘텐츠 영역 */}
       <main className="pt-16 px-4">
-        {/* 사용자 환영 메시지 및 요약 정보 카드 */}
+        <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">프로필 선택</h3>
+          <div className="flex flex-wrap gap-2">
+            {profiles.map(profile => (
+              <button 
+                key={profile.id} 
+                onClick={() => toggleProfileSelection(profile.id)}
+                className={`px-3 py-2 rounded-full text-sm border ${
+                  selectedProfiles.includes(profile.id) 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-200'
+                }`}>
+                {profile.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 mb-6 text-white">
           <div className="flex items-center mb-4">
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-3">
               <i className="ri-shield-check-line text-2xl"></i>
             </div>
             <div>
-              <h2 className="text-xl font-bold">안녕하세요, 김민수님</h2>
+              <h2 className="text-xl font-bold">안녕하세요, {selectedProfileNames}님</h2>
               <p className="text-blue-100 text-sm">오늘도 안전한 하루 되세요</p>
             </div>
           </div>
@@ -76,7 +87,6 @@ export default function Home() {
             <p className="text-blue-100 text-sm mb-4">지금까지 총 {allergyStats.reduce((sum, stat) => sum + stat.count, 0)}개 제품을 검사했어요</p>
           </div>
           
-          {/* 알레르기 통계 정보를 표시합니다. */}
           <div className="space-y-3">
             {allergyStats.map((stat, index) => (
               <div key={index} className="bg-white/10 rounded-xl p-4">
@@ -100,7 +110,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 빠른 실행 섹션 */}
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">빠른 실행</h3>
           <div className="grid grid-cols-2 gap-4">
@@ -120,14 +129,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 최근 스캔 기록 섹션 */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-6">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-gray-900">최근 스캔 기록</h3>
             <Link href="/history" className="text-sm text-blue-600">전체보기</Link>
           </div>
           
-          {/* 최근 스캔 기록 목록 */}
           <div className="space-y-3">
             {[
               { name: '오리온 초코파이', time: '2분 전', status: 'safe', icon: 'ri-check-line' },
@@ -152,7 +159,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 알레르기 주의사항 섹션 */}
         <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-4 border border-orange-100">
           <div className="flex items-start">
             <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
@@ -173,7 +179,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* 하단 네비게이션을 렌더링합니다. */}
       <BottomNav />
     </div>
   );

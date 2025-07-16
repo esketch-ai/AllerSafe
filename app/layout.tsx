@@ -1,4 +1,3 @@
-
 // app/layout.tsx
 
 // Next.js에서 메타데이터 타입을 가져옵니다.
@@ -7,6 +6,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Pacifico } from "next/font/google";
 // 전역 CSS 파일을 가져옵니다.
 import "./globals.css";
+import { ProfileProvider } from "@/contexts/ProfileContext";
 
 // Pacifico 폰트를 설정합니다.
 const pacifico = Pacifico({
@@ -47,8 +47,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable} antialiased`}
       >
-        {/* 자식 컴포넌트를 렌더링합니다. */}
-        {children}
+        <ProfileProvider>{children}</ProfileProvider>
       </body>
     </html>
   );

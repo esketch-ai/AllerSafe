@@ -1,23 +1,16 @@
 
-// app/restaurants/page.tsx
+'use client';
 
-'use client'; // 이 파일이 클라이언트 측에서 렌더링되도록 설정합니다.
-
-// React의 useState 훅을 가져옵니다.
 import { useState } from 'react';
-// 상단 네비게이션 컴포넌트를 가져옵니다.
 import TopNav from '@/components/TopNav';
-// 하단 네비게이션 컴포넌트를 가져옵니다.
 import BottomNav from '@/components/BottomNav';
+import { useProfile } from '@/contexts/ProfileContext';
 
-// 안전 식당 페이지 컴포넌트
 export default function RestaurantsPage() {
-  // 선택된 필터를 관리하는 상태
+  const { profiles, selectedProfiles } = useProfile();
   const [selectedFilter, setSelectedFilter] = useState('all');
-  // 선택된 식당을 관리하는 상태 (상세 정보 표시용)
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
-  // 필터 데이터를 정의합니다.
   const filters = [
     { id: 'all', name: '전체', count: 24 },
     { id: 'nearby', name: '근처', count: 8 },
@@ -25,7 +18,6 @@ export default function RestaurantsPage() {
     { id: 'favorite', name: '즐겨찾기', count: 5 },
   ];
 
-  // 식당 목록 데이터를 정의합니다.
   const restaurants = [
     {
       id: 1,
@@ -44,17 +36,71 @@ export default function RestaurantsPage() {
       mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.4!2d127.0276!3d37.4979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDI5JzUyLjQiTiAxMjfCsDA0JzE5LjAiRQ!5e0!3m2!1sko!2skr!4v1234567890',
       image: 'https://readdy.ai/api/search-image?query=Modern%20clean%20cafe%20interior%2C%20bright%20natural%20lighting%2C%20minimalist%20design%2C%20wooden%20tables%2C%20comfortable%20seating%2C%20coffee%20shop%20atmosphere%2C%20welcoming%20environment%2C%20clean%20white%20walls%2C%20large%20windows%2C%20cozy%20ambiance%2C%20professional%20photography%2C%20high%20quality%2C%20realistic%20style&width=300&height=200&seq=cafe1&orientation=landscape'
     },
-    // ... (다른 식당 데이터)
+    {
+      id: 2,
+      name: '건강한 식당',
+      category: '한식',
+      rating: 4.6,
+      reviewCount: 89,
+      distance: '0.5km',
+      allergyFree: ['유제품', '달걀'],
+      certified: true,
+      address: '서울시 강남구 논현로 456',
+      phone: '02-2345-6789',
+      hours: '매일 11:00-21:30 (브레이크타임 15:00-17:00)',
+      latitude: 37.5133,
+      longitude: 127.0384,
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.8!2d127.0384!3d37.5133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDMwJzQ3LjkiTiAxMjfCsDAyJzE4LjIiRQ!5e0!3m2!1sko!2skr!4v1234567891',
+      image: 'https://readdy.ai/api/search-image?query=Traditional%20Korean%20restaurant%20interior%2C%20warm%20wooden%20furniture%2C%20traditional%20Korean%20design%20elements%2C%20comfortable%20dining%20atmosphere%2C%20clean%20modern%20style%2C%20natural%20lighting%2C%20elegant%20table%20settings%2C%20authentic%20Korean%20dining%20experience%2C%20professional%20photography%2C%20high%20quality&width=300&height=200&seq=korean1&orientation=landscape'
+    },
+    {
+      id: 3,
+      name: '글루텐프리 베이커리',
+      category: '베이커리',
+      rating: 4.9,
+      reviewCount: 234,
+      distance: '0.8km',
+      allergyFree: ['글루텐', '밀'],
+      certified: false,
+      address: '서울시 강남구 선릉로 789',
+      phone: '02-3456-7890',
+      hours: '화-일 06:30-20:00 (월요일 휴무)',
+      latitude: 37.5047,
+      longitude: 127.0486,
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.2!2d127.0486!3d37.5047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDMwJzE3LjAiTiAxMjfCsDAyJzU1LjAiRQ!5e0!3m2!1sko!2skr!4v1234567892',
+      image: 'https://readdy.ai/api/search-image?query=Modern%20bakery%20interior%2C%20display%20cases%20with%20fresh%20bread%2C%20clean%20white%20interior%2C%20bright%20lighting%2C%20professional%20bakery%20equipment%2C%20welcoming%20atmosphere%2C%20artisan%20bread%20displays%2C%20contemporary%20design%2C%20high%20quality%20photography%2C%20realistic%20style&width=300&height=200&seq=bakery1&orientation=landscape'
+    },
+    {
+      id: 4,
+      name: '비건 레스토랑',
+      category: '비건',
+      rating: 4.7,
+      reviewCount: 167,
+      distance: '1.2km',
+      allergyFree: ['유제품', '달걀', '꿀'],
+      certified: true,
+      address: '서울시 강남구 강남대로 321',
+      phone: '02-4567-8901',
+      hours: '매일 11:30-22:00',
+      latitude: 37.4951,
+      longitude: 127.0664,
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.7!2d127.0664!3d37.4951!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDI5JzQyLjQiTiAxMjfCsDAzJzU5LjAiRQ!5e0!3m2!1sko!2skr!4v1234567893',
+      image: 'https://readdy.ai/api/search-image?query=Modern%20vegan%20restaurant%20interior%2C%20green%20plants%2C%20natural%20materials%2C%20healthy%20food%20atmosphere%2C%20clean%20contemporary%20design%2C%20bright%20natural%20lighting%2C%20comfortable%20seating%2C%20eco-friendly%20decor%2C%20professional%20photography%2C%20high%20quality%2C%20realistic%20style&width=300&height=200&seq=vegan1&orientation=landscape'
+    },
   ];
 
-  // 전화 걸기 핸들러
   const handleCall = (phone) => {
     window.open(`tel:${phone}`, '_self');
   };
 
-  // 길찾기 핸들러
   const handleDirections = (address) => {
     window.open(`https://maps.google.com/maps?q=${encodeURIComponent(address)}`, '_blank');
+  };
+
+  const isSafeForAllSelectedProfiles = (restaurant) => {
+    if (selectedProfiles.length === 0) return false;
+    const selectedProfileAllergies = selectedProfiles.flatMap(id => profiles.find(p => p.id === id)?.allergies || []);
+    return restaurant.allergyFree.some(free => selectedProfileAllergies.includes(free));
   };
 
   return (
@@ -63,7 +109,6 @@ export default function RestaurantsPage() {
       
       <main className="pt-16">
         <div className="px-4 pb-4">
-          {/* 검색창 */}
           <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100">
             <div className="flex items-center bg-gray-50 rounded-xl p-3">
               <i className="ri-search-line text-gray-400 mr-3"></i>
@@ -75,7 +120,6 @@ export default function RestaurantsPage() {
             </div>
           </div>
 
-          {/* 필터 버튼 */}
           <div className="flex gap-2 mb-4 overflow-x-auto">
             {filters.map((filter) => (
               <button
@@ -100,7 +144,6 @@ export default function RestaurantsPage() {
           </div>
         </div>
 
-        {/* 식당 목록 */}
         <div className="px-4 space-y-4">
           {restaurants.map((restaurant) => (
             <div key={restaurant.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
@@ -110,6 +153,12 @@ export default function RestaurantsPage() {
                   alt={restaurant.name}
                   className="w-full h-full object-cover object-top"
                 />
+                {isSafeForAllSelectedProfiles(restaurant) && (
+                  <div className="absolute top-3 left-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                    <i className="ri-shield-check-line mr-1"></i>
+                    모두에게 안전
+                  </div>
+                )}
                 {restaurant.certified && (
                   <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
                     <i className="ri-verified-badge-line mr-1"></i>
@@ -183,7 +232,6 @@ export default function RestaurantsPage() {
                   </button>
                 </div>
 
-                {/* 상세 정보 표시 영역 */}
                 {selectedRestaurant === restaurant.id && (
                   <div className="border-t pt-4 mt-4">
                     <div className="mb-4">
@@ -227,7 +275,6 @@ export default function RestaurantsPage() {
           ))}
         </div>
 
-        {/* 식당 등록 안내 카드 */}
         <div className="px-4 mt-6 mb-6">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100">
             <div className="flex items-start">

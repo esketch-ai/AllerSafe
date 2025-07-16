@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import TopNav from '@/components/TopNav';
 import BottomNav from '@/components/BottomNav';
+import { useProfile } from '@/contexts/ProfileContext';
 
 export default function ScanPage() {
+  const { profiles, selectedProfiles } = useProfile();
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<any>(null);
 
@@ -12,15 +14,25 @@ export default function ScanPage() {
     setIsScanning(true);
     
     setTimeout(() => {
+      const productAllergens = ['밀', '달걀', '우유', '초콜릿'];
+      const analysis = selectedProfiles.map(profileId => {
+        const profile = profiles.find(p => p.id === profileId);
+        if (!profile) return null;
+
+        const triggeredAllergens = profile.allergies.filter(allergen => productAllergens.includes(allergen));
+        return {
+          profileName: profile.name,
+          status: triggeredAllergens.length > 0 ? 'danger' : 'safe',
+          triggeredAllergens,
+        };
+      }).filter(Boolean);
+
       setIsScanning(false);
       setScanResult({
         productName: '오리온 초코파이',
         barcode: '8801117123456',
-        status: 'safe',
-        allergens: ['밀', '달걀', '우유'],
-        userAllergens: ['견과류'],
-        ingredients: ['밀가루', '설탕', '식용유지', '달걀', '우유', '코코아분말', '베이킹파우더'],
-        safetyScore: 85
+        ingredients: ['밀가루', '설탕', '식용유지', '달걀', '우유', '코코아분말', '베이킹파우더', '초콜릿'],
+        analysis,
       });
     }, 2000);
   };
@@ -38,68 +50,36 @@ export default function ScanPage() {
         <main className="pt-16 px-4">
           <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
             <div className="text-center mb-6">
-              <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                scanResult.status === 'safe' ? 'bg-green-100' : 'bg-yellow-100'
-              }`}>
-                <i className={`${scanResult.status === 'safe' ? 'ri-check-line text-green-600' : 'ri-error-warning-line text-yellow-600'} text-3xl`}></i>
-              </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">{scanResult.productName}</h2>
               <p className="text-sm text-gray-500">바코드: {scanResult.barcode}</p>
             </div>
 
-            <div className={`p-4 rounded-xl mb-6 ${
-              scanResult.status === 'safe' ? 'bg-green-50 border border-green-100' : 'bg-yellow-50 border border-yellow-100'
-            }`}>
-              <div className="flex items-center mb-2">
-                <i className={`${scanResult.status === 'safe' ? 'ri-shield-check-line text-green-600' : 'ri-alert-line text-yellow-600'} mr-2`}></i>
-                <span className={`font-semibold ${scanResult.status === 'safe' ? 'text-green-800' : 'text-yellow-800'}`}>
-                  {scanResult.status === 'safe' ? '섭취 가능' : '주의 필요'}
-                </span>
-              </div>
-              <p className={`text-sm ${scanResult.status === 'safe' ? 'text-green-700' : 'text-yellow-700'}`}>
-                {scanResult.status === 'safe' 
-                  ? '등록된 알레르기 성분이 포함되어 있지 않습니다.'
-                  : '알레르기를 유발할 수 있는 성분이 포함되어 있습니다.'
-                }
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">알레르기 성분</h3>
-                <div className="flex flex-wrap gap-2">
-                  {scanResult.allergens.map((allergen: string, index: number) => (
-                    <span key={index} className={`px-3 py-1 rounded-full text-sm ${
-                      scanResult.userAllergens.includes(allergen)
-                        ? 'bg-red-100 text-red-700 border border-red-200'
-                        : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      {allergen}
+            <div className="space-y-4 mb-6">
+              {scanResult.analysis.map((result: any, index: number) => (
+                <div key={index} className={`p-4 rounded-xl border ${
+                  result.status === 'safe' ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'
+                }`}>
+                  <div className="flex items-center mb-2">
+                    <i className={`${result.status === 'safe' ? 'ri-shield-check-line text-green-600' : 'ri-alert-line text-red-600'} mr-2`}></i>
+                    <span className={`font-semibold ${result.status === 'safe' ? 'text-green-800' : 'text-red-800'}`}>
+                      {result.profileName}: {result.status === 'safe' ? '안전' : '위험'}
                     </span>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">안전도 점수</h3>
-                <div className="flex items-center">
-                  <div className="flex-1 bg-gray-200 rounded-full h-3 mr-3">
-                    <div 
-                      className={`h-3 rounded-full ${scanResult.safetyScore >= 80 ? 'bg-green-500' : scanResult.safetyScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                      style={{ width: `${scanResult.safetyScore}%` }}
-                    ></div>
                   </div>
-                  <span className="font-semibold text-gray-900">{scanResult.safetyScore}점</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">전체 성분</h3>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    {scanResult.ingredients.join(', ')}
+                  <p className={`text-sm ${result.status === 'safe' ? 'text-green-700' : 'text-red-700'}`}>
+                    {result.status === 'safe'
+                      ? `등록된 알레르기 성분이 포함되어 있지 않습니다.`
+                      : `알레르기 유발 성분: ${result.triggeredAllergens.join(', ')}`}
                   </p>
                 </div>
+              ))}
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">전체 성분</h3>
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {scanResult.ingredients.join(', ')}
+                </p>
               </div>
             </div>
           </div>
@@ -112,7 +92,7 @@ export default function ScanPage() {
               다시 스캔
             </button>
             <button className="!rounded-button bg-blue-600 text-white py-3 font-medium">
-              즐겨찾기 추가
+              기록 저장
             </button>
           </div>
         </main>

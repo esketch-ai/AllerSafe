@@ -1,8 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AllerSafe - 내 손안의 알레르기 관리 비서
 
-## Getting Started
+AllerSafe는 개인과 가족의 알레르기 정보를 손쉽게 관리하고, 식품 구매 및 외식 시 안전한 선택을 돕는 모바일 애플리케이션입니다. 바코드 스캔 한 번으로 식품의 알레르기 유발 성분을 즉시 확인하고, 나와 내 가족, 심지어 반려동물에게 안전한 제품인지 맞춤형 분석 결과를 제공합니다.
 
-First, run the development server:
+## 주요 기능
+
+*   **다중 프로필 관리:** 본인뿐만 아니라 가족 구성원, 반려동물의 프로필을 각각 생성하고 알레르기, 식이 제한, 기피 식품 정보를 개별적으로 관리할 수 있습니다.
+*   **스마트 바코드 스캔:** 식품 바코드를 스캔하면, 등록된 모든 프로필의 정보를 기반으로 각 개인에게 안전한지, 위험한지, 주의가 필요한지를 한눈에 보여줍니다.
+*   **맞춤형 안전 분석:** 스캔 결과 화면에서 각 프로필별로 어떤 성분이 알레르기를 유발하는지 상세 정보를 제공하여 명확한 판단을 돕습니다.
+*   **안전 식당 찾기:** 내 주변의 알레르기 안심 식당을 찾아줍니다. 특히, 현재 선택된 프로필 그룹 모두가 안전하게 방문할 수 있는 식당에는 "모두에게 안전" 뱃지를 표시하여 가족 외식 장소 선택을 용이하게 합니다.
+*   **종합 정보 제공:** 응급 상황 대처법, 주요 알레르기 정보, 관리 팁 등 알레르기와 관련된 필수 정보들을 제공하여 사용자의 안전한 생활을 지원합니다.
+
+## 기술 스택
+
+*   **프레임워크:** Next.js (React)
+*   **언어:** TypeScript
+*   **스타일링:** Tailwind CSS
+*   **상태 관리:** React Context API
+*   **아이콘:** Remix Icon
+
+## 시작하기
+
+먼저, 개발 서버를 실행합니다:
 
 ```bash
 npm run dev
@@ -14,17 +32,15 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 결과를 확인하세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`app/page.tsx` 파일을 수정하여 페이지 편집을 시작할 수 있습니다. 파일 편집 시 페이지는 자동으로 업데이트됩니다.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 더 알아보기
 
-## Learn More
+Next.js에 대해 더 배우려면 다음 리소스를 살펴보세요:
 
-To learn more about Next.js, take a look at the following resources:
+*   [Next.js Documentation](https://nextjs.org/docs) - Next.js 기능 및 API에 대해 알아보세요.
+*   [Learn Next.js](https://nextjs.org/learn) - 대화형 Next.js 튜토리얼입니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[Next.js GitHub 저장소](https://github.com/vercel/next.js)를 확인해 보세요. 여러분의 피드백과 기여를 환영합니다!
