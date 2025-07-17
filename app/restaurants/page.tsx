@@ -151,82 +151,82 @@ export default function RestaurantsPage() {
                 <img 
                   src={restaurant.image} 
                   alt={restaurant.name}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-center"
                 />
                 {isSafeForAllSelectedProfiles(restaurant) && (
-                  <div className="absolute top-3 left-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                  <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center shadow-md">
                     <i className="ri-shield-check-line mr-1"></i>
                     모두에게 안전
                   </div>
                 )}
                 {restaurant.certified && (
-                  <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                  <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center shadow-md">
                     <i className="ri-verified-badge-line mr-1"></i>
-                    인증
+                    인증 식당
                   </div>
                 )}
-                <div className="absolute bottom-3 left-3 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
+                <div className="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-medium">
                   {restaurant.distance}
                 </div>
               </div>
               
               <div className="p-4">
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">{restaurant.name}</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{restaurant.name}</h3>
                     <p className="text-sm text-gray-500">{restaurant.category}</p>
                   </div>
-                  <div className="flex items-center">
-                    <i className="ri-star-fill text-yellow-400 mr-1"></i>
-                    <span className="font-medium text-gray-900">{restaurant.rating}</span>
-                    <span className="text-sm text-gray-500 ml-1">({restaurant.reviewCount})</span>
+                  <div className="flex items-center bg-yellow-500 text-white px-2 py-1 rounded-full text-sm font-bold">
+                    <i className="ri-star-fill mr-1"></i>
+                    <span>{restaurant.rating}</span>
+                    <span className="text-xs opacity-80 ml-1">({restaurant.reviewCount})</span>
                   </div>
                 </div>
 
-                <div className="mb-3 space-y-1">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-map-pin-line mr-2 text-gray-400"></i>
+                <div className="mb-4 space-y-1 text-gray-700">
+                  <div className="flex items-center text-sm">
+                    <i className="ri-map-pin-line mr-2 text-gray-500"></i>
                     <span>{restaurant.address}</span>
                   </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-phone-line mr-2 text-gray-400"></i>
+                  <div className="flex items-center text-sm">
+                    <i className="ri-phone-line mr-2 text-gray-500"></i>
                     <span>{restaurant.phone}</span>
                   </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-time-line mr-2 text-gray-400"></i>
+                  <div className="flex items-center text-sm">
+                    <i className="ri-time-line mr-2 text-gray-500"></i>
                     <span>{restaurant.hours}</span>
                   </div>
                 </div>
 
-                <div className="mb-3">
-                  <p className="text-sm text-gray-600 mb-2">알레르기 대응 가능:</p>
-                  <div className="flex flex-wrap gap-1">
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600 mb-2 font-medium">알레르기 대응 가능:</p>
+                  <div className="flex flex-wrap gap-2">
                     {restaurant.allergyFree.map((allergy, index) => (
-                      <span key={index} className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+                      <span key={index} className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
                         {allergy} 프리
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex gap-2 mb-3">
+                <div className="grid grid-cols-3 gap-2 mb-3">
                   <button 
                     onClick={() => handleCall(restaurant.phone)}
-                    className="flex items-center justify-center !rounded-button bg-gray-100 text-gray-700 px-3 py-2 text-sm font-medium"
+                    className="flex items-center justify-center !rounded-button bg-gray-100 text-gray-700 px-3 py-2 text-sm font-medium hover:bg-gray-200 transition-colors duration-200"
                   >
                     <i className="ri-phone-line mr-1"></i>
                     전화
                   </button>
                   <button 
                     onClick={() => handleDirections(restaurant.address)}
-                    className="flex items-center justify-center !rounded-button bg-blue-100 text-blue-700 px-3 py-2 text-sm font-medium"
+                    className="flex items-center justify-center !rounded-button bg-blue-100 text-blue-700 px-3 py-2 text-sm font-medium hover:bg-blue-200 transition-colors duration-200"
                   >
                     <i className="ri-navigation-line mr-1"></i>
                     길찾기
                   </button>
                   <button 
                     onClick={() => setSelectedRestaurant(selectedRestaurant === restaurant.id ? null : restaurant.id)}
-                    className="flex-1 !rounded-button bg-blue-600 text-white py-2 text-sm font-medium"
+                    className="flex-1 !rounded-button bg-blue-600 text-white py-2 text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
                   >
                     {selectedRestaurant === restaurant.id ? '접기' : '상세보기'}
                   </button>

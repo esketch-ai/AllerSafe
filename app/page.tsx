@@ -60,10 +60,10 @@ export default function Home() {
               <button 
                 key={profile.id} 
                 onClick={() => toggleProfileSelection(profile.id)}
-                className={`px-3 py-2 rounded-full text-sm border ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                   selectedProfiles.includes(profile.id) 
-                    ? 'bg-blue-600 text-white border-blue-600' 
-                    : 'bg-white text-gray-700 border-gray-200'
+                    ? 'bg-blue-600 text-white shadow-md' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}>
                 {profile.name}
               </button>
@@ -71,13 +71,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 mb-6 text-white">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
           <div className="flex items-center mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-3">
-              <i className="ri-shield-check-line text-2xl"></i>
+            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+              <i className="ri-shield-check-line text-3xl"></i>
             </div>
             <div>
-              <h2 className="text-xl font-bold">안녕하세요, {selectedProfileNames}님</h2>
+              <h2 className="text-xl font-bold">안녕하세요, {selectedProfileNames.length > 20 ? selectedProfileNames.substring(0, 20) + '...' : selectedProfileNames}님</h2>
               <p className="text-blue-100 text-sm">오늘도 안전한 하루 되세요</p>
             </div>
           </div>
@@ -89,20 +89,18 @@ export default function Home() {
           
           <div className="space-y-3">
             {allergyStats.map((stat, index) => (
-              <div key={index} className="bg-white/10 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className={`w-4 h-4 ${stat.color} rounded-full mr-3`}></div>
-                    <div>
-                      <div className="text-lg font-bold">{stat.name}</div>
-                      <div className="text-xs text-blue-100">{stat.desc}</div>
-                    </div>
+              <div key={index} className="bg-white/15 rounded-xl p-4 flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className={`w-5 h-5 ${stat.color} rounded-full mr-3 flex-shrink-0`}></div>
+                  <div>
+                    <div className="text-lg font-bold">{stat.name}</div>
+                    <div className="text-xs text-blue-100 opacity-80">{stat.desc}</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold">{stat.count}개</div>
-                    <div className="text-xs text-blue-100">
-                      {Math.round((stat.count / allergyStats.reduce((sum, s) => sum + s.count, 0)) * 100)}%
-                    </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold">{stat.count}개</div>
+                  <div className="text-xs text-blue-100 opacity-80">
+                    {Math.round((stat.count / allergyStats.reduce((sum, s) => sum + s.count, 0)) * 100)}%
                   </div>
                 </div>
               </div>

@@ -50,25 +50,28 @@ export default function ScanPage() {
         <main className="pt-16 px-4">
           <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">{scanResult.productName}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{scanResult.productName}</h2>
               <p className="text-sm text-gray-500">바코드: {scanResult.barcode}</p>
             </div>
 
             <div className="space-y-4 mb-6">
               {scanResult.analysis.map((result: any, index: number) => (
-                <div key={index} className={`p-4 rounded-xl border ${
+                <div key={index} className={`p-4 rounded-xl border transition-colors duration-200 ${
                   result.status === 'safe' ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'
                 }`}>
                   <div className="flex items-center mb-2">
-                    <i className={`${result.status === 'safe' ? 'ri-shield-check-line text-green-600' : 'ri-alert-line text-red-600'} mr-2`}></i>
-                    <span className={`font-semibold ${result.status === 'safe' ? 'text-green-800' : 'text-red-800'}`}>
+                    <i className={`${result.status === 'safe' ? 'ri-shield-check-line text-green-600' : 'ri-alert-line text-red-600'} text-xl mr-2`}></i>
+                    <span className={`font-semibold text-lg ${result.status === 'safe' ? 'text-green-800' : 'text-red-800'}`}>
                       {result.profileName}: {result.status === 'safe' ? '안전' : '위험'}
                     </span>
                   </div>
                   <p className={`text-sm ${result.status === 'safe' ? 'text-green-700' : 'text-red-700'}`}>
                     {result.status === 'safe'
                       ? `등록된 알레르기 성분이 포함되어 있지 않습니다.`
-                      : `알레르기 유발 성분: ${result.triggeredAllergens.join(', ')}`}
+                      : `알레르기 유발 성분: `}
+                    {result.triggeredAllergens.map((allergen: string, idx: number) => (
+                      <span key={idx} className="font-bold">{allergen}{idx < result.triggeredAllergens.length - 1 ? ', ' : ''}</span>
+                    ))}
                   </p>
                 </div>
               ))}
@@ -87,11 +90,11 @@ export default function ScanPage() {
           <div className="grid grid-cols-2 gap-4">
             <button 
               onClick={resetScan}
-              className="!rounded-button bg-gray-100 text-gray-700 py-3 font-medium"
+              className="!rounded-button bg-gray-100 text-gray-700 py-3 font-medium hover:bg-gray-200 transition-colors duration-200"
             >
               다시 스캔
             </button>
-            <button className="!rounded-button bg-blue-600 text-white py-3 font-medium">
+            <button className="!rounded-button bg-blue-600 text-white py-3 font-medium hover:bg-blue-700 transition-colors duration-200">
               기록 저장
             </button>
           </div>
