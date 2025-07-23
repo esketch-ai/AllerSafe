@@ -1,19 +1,53 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import TopNav from '@/components/TopNav';
 import BottomNav from '@/components/BottomNav';
 import { useProfile } from '@/contexts/ProfileContext';
 
+interface ScanRecord {
+  id: string;
+  name: string;
+  time: string;
+  status: 'safe' | 'warning' | 'danger';
+  icon: string;
+}
+
 export default function Home() {
   const { profiles, selectedProfiles, toggleProfileSelection } = useProfile();
+  const [scanRecords, setScanRecords] = useState<ScanRecord[]>([]);
+  const [allergyStats, setAllergyStats] = useState([
+    { name: '안전', count: 0, color: 'bg-green-500', desc: '섭취 가능한 제품' },
+    { name: '주의', count: 0, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
+    { name: '위험', count: 0, color: 'bg-red-500', desc: '섭취 금지 제품' },
+  ]);
 
-  const allergyStats = [
-    { name: '안전', count: 234, color: 'bg-green-500', desc: '섭취 가능한 제품' },
-    { name: '주의', count: 12, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
-    { name: '위험', count: 3, color: 'bg-red-500', desc: '섭취 금지 제품' },
-  ];
+  useEffect(() => {
+    const fetchScanRecords = async () => {
+      try {
+        const res = await fetch('/api/scan-records');
+        const data: ScanRecord[] = await res.json();
+        setScanRecords(data);
+
+        // Calculate allergy stats
+        const safeCount = data.filter(record => record.status === 'safe').length;
+        const warningCount = data.filter(record => record.status === 'warning').length;
+        const dangerCount = data.filter(record => record.status === 'danger').length;
+
+        setAllergyStats([
+          { name: '안전', count: safeCount, color: 'bg-green-500', desc: '섭취 가능한 제품' },
+          { name: '주의', count: warningCount, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
+          { name: '위험', count: dangerCount, color: 'bg-red-500', desc: '섭취 금지 제품' },
+        ]);
+
+      } catch (error) {
+        console.error('Failed to fetch scan records:', error);
+      }
+    };
+    fetchScanRecords();
+  }, []);
 
   const quickActions = [
     { 

@@ -18,3 +18,11 @@ model Profile {
   religiousRestrictions String
   personalDislikes    String
 }
+
+model ScanRecord {
+  id        String   @id @default(cuid())
+  name      String
+  time      DateTime @default(now())
+  status    String // 'safe', 'warning', 'danger'
+  icon      String
+}
