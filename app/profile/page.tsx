@@ -221,13 +221,6 @@ export default function ProfilePage() {
     }
   };
 
-  // 특정 프로필의 필드를 업데이트하는 함수
-  const updateProfile = (profileId: string, field: string, value: string[]) => {
-    setProfiles(profiles.map(p =>
-      p.id === profileId ? { ...p, [field]: value } : p
-    ));
-  };
-
   // 항목을 선택/해제하는 함수
   const toggleItem = (profileId: string, field: string, item: string) => {
     const profile = profiles.find(p => p.id === profileId);
@@ -250,7 +243,7 @@ export default function ProfilePage() {
       ? currentItems.filter(i => i !== item)
       : [...currentItems, item];
 
-    updateProfile(profileId, field, newItems);
+    updateProfile({ ...profile, [field]: newItems });
   };
 
   // 편집 타입에 맞는 옵션 목록을 반환하는 함수
