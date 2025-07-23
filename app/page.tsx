@@ -29,18 +29,22 @@ export default function Home() {
       try {
         const res = await fetch('/api/scan-records');
         const data: ScanRecord[] = await res.json();
-        setScanRecords(data);
+        if (Array.isArray(data)) {
+          setScanRecords(data);
 
-        // Calculate allergy stats
-        const safeCount = data.filter(record => record.status === 'safe').length;
-        const warningCount = data.filter(record => record.status === 'warning').length;
-        const dangerCount = data.filter(record => record.status === 'danger').length;
+          // Calculate allergy stats
+          const safeCount = data.filter(record => record.status === 'safe').length;
+          const warningCount = data.filter(record => record.status === 'warning').length;
+          const dangerCount = data.filter(record => record.status === 'danger').length;
 
-        setAllergyStats([
-          { name: '안전', count: safeCount, color: 'bg-green-500', desc: '섭취 가능한 제품' },
-          { name: '주의', count: warningCount, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
-          { name: '위험', count: dangerCount, color: 'bg-red-500', desc: '섭취 금지 제품' },
-        ]);
+          setAllergyStats([
+            { name: '안전', count: safeCount, color: 'bg-green-500', desc: '섭취 가능한 제품' },
+            { name: '주의', count: warningCount, color: 'bg-yellow-500', desc: '신중히 확인 필요' },
+            { name: '위험', count: dangerCount, color: 'bg-red-500', desc: '섭취 금지 제품' },
+          ]);
+        } else {
+          console.error('API response for scan records is not an array:', data);
+        }
 
       } catch (error) {
         console.error('Failed to fetch scan records:', error);
