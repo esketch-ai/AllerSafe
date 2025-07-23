@@ -26,3 +26,12 @@ model ScanRecord {
   status    String // 'safe', 'warning', 'danger'
   icon      String
 }
+
+model QuickAction {
+  id    String @id @default(cuid())
+  icon  String
+  title String
+  desc  String
+  href  String
+  bg    String
+}
