@@ -22,6 +22,76 @@ interface ProfileData {
   personalDislikes: string[]; // 개인적 거부 음식 목록
 }
 
+// 개별 프로필 카드를 렌더링하는 컴포넌트
+const ProfileCard = ({ profile, setEditingProfile, setEditType, getFieldLabel }: { 
+  profile: ProfileData; 
+  setEditingProfile: (id: string | null) => void; 
+  setEditType: (type: 'allergies' | 'dietary' | 'religious' | 'personal' | null) => void;
+  getFieldLabel: (type: 'allergies' | 'dietary' | 'religious' | 'personal') => string;
+}) => (
+  <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100">
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center">
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold mr-3 ${
+          profile.type === 'self' ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
+            profile.type === 'family' ? 'bg-gradient-to-br from-green-500 to-green-600' :
+              'bg-gradient-to-br from-orange-500 to-orange-600'
+        }`}>
+          {profile.name.charAt(0)}
+        </div>
+        <div>
+          <h3 className="font-semibold text-gray-900">{profile.name}</h3>
+          <p className="text-sm text-gray-500">
+            {profile.relation || profile.species || '본인'}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div className="space-y-3">
+      {(['allergies', 'dietary', 'religious', 'personal'] as const).map((type) => (
+        <div key={type} className="border-t border-gray-50 pt-3 first:border-t-0 first:pt-0">
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="text-sm font-medium text-gray-700 flex items-center">
+              <i className={`${type === 'allergies' ? 'ri-alert-line text-red-500' :
+                type === 'dietary' ? 'ri-leaf-line text-green-500' :
+                  type === 'religious' ? 'ri-church-line text-purple-500' :
+                    'ri-close-circle-line text-orange-500'
+              } mr-2`}></i>
+              {getFieldLabel(type)}
+            </h4>
+            <button
+              onClick={() => {
+                setEditingProfile(profile.id);
+                setEditType(type);
+              }}
+              className="text-blue-600 text-xs font-medium"
+            >
+              편집
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-1">
+            {(profile[type] as string[] || []).map((item: string) => (
+              <span key={item} className={`px-2 py-1 rounded-full text-xs border ${
+                type === 'allergies' ? 'bg-red-50 text-red-700 border-red-200' :
+                  type === 'dietary' ? 'bg-green-50 text-green-700 border-green-200' :
+                    type === 'religious' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                      'bg-orange-50 text-orange-700 border-orange-200'
+              }`}>
+                {item}
+              </span>
+            ))}
+            {(profile[type] as string[] || []).length === 0 && (
+              <span className="text-xs text-gray-400">없음</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 // 프로필 관리 페이지 컴포넌트
 export default function ProfilePage() {
   // 활성 탭을 관리하는 상태 ('self', 'family', 'pet')
@@ -214,71 +284,6 @@ export default function ProfilePage() {
     }
   };
 
-  // 개별 프로필 카드를 렌더링하는 컴포넌트
-  const ProfileCard = ({ profile }: { profile: ProfileData }) => (
-    <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center">
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold mr-3 ${
-            profile.type === 'self' ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
-              profile.type === 'family' ? 'bg-gradient-to-br from-green-500 to-green-600' :
-                'bg-gradient-to-br from-orange-500 to-orange-600'
-          }`}>
-            {profile.name.charAt(0)}
-          </div>
-          <div>
-            <h3 className="font-semibold text-gray-900">{profile.name}</h3>
-            <p className="text-sm text-gray-500">
-              {profile.relation || profile.species || '본인'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {(['allergies', 'dietary', 'religious', 'personal'] as const).map((type) => (
-          <div key={type} className="border-t border-gray-50 pt-3 first:border-t-0 first:pt-0">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-medium text-gray-700 flex items-center">
-                <i className={`${type === 'allergies' ? 'ri-alert-line text-red-500' :
-                  type === 'dietary' ? 'ri-leaf-line text-green-500' :
-                    type === 'religious' ? 'ri-church-line text-purple-500' :
-                      'ri-close-circle-line text-orange-500'
-                } mr-2`}></i>
-                {getFieldLabel(type)}
-              </h4>
-              <button
-                onClick={() => {
-                  setEditingProfile(profile.id);
-                  setEditType(type);
-                }}
-                className="text-blue-600 text-xs font-medium"
-              >
-                편집
-              </button>
-            </div>
-
-            <div className="flex flex-wrap gap-1">
-              {(profile[type] as string[] || []).map((item: string) => (
-                <span key={item} className={`px-2 py-1 rounded-full text-xs border ${
-                  type === 'allergies' ? 'bg-red-50 text-red-700 border-red-200' :
-                    type === 'dietary' ? 'bg-green-50 text-green-700 border-green-200' :
-                      type === 'religious' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                        'bg-orange-50 text-orange-700 border-orange-200'
-                }`}>
-                  {item}
-                </span>
-              ))}
-              {(profile[type] as string[] || []).length === 0 && (
-                <span className="text-xs text-gray-400">없음</span>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <TopNav title="프로필 관리" showMenu={true} />
@@ -318,7 +323,13 @@ export default function ProfilePage() {
         </div>
 
         {getFilteredProfiles().map((profile) => (
-          <ProfileCard key={profile.id} profile={profile} />
+          <ProfileCard 
+            key={profile.id} 
+            profile={profile} 
+            setEditingProfile={setEditingProfile} 
+            setEditType={setEditType} 
+            getFieldLabel={getFieldLabel} 
+          />
         ))}
 
         {editingProfile && editType && (
