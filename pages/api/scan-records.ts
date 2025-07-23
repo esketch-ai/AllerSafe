@@ -10,7 +10,7 @@ export default async function handler(req, res) {
           time: 'desc',
         },
       });
-      res.status(200).json(scanRecords);
+      res.status(200).json(Array.isArray(scanRecords) ? scanRecords : []);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch scan records' });
     }
