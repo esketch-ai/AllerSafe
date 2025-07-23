@@ -6,7 +6,7 @@ import type { NextConfig } from "next";
 // Next.js 설정을 정의합니다.
 const nextConfig: NextConfig = {
   // 정적 HTML로 내보내는 옵션을 활성화합니다.
-  output: "export",
+  // output: "export",
   // 이미지 최적화 기능을 비활성화합니다.
   images: {
     unoptimized: true,
