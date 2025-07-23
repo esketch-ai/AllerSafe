@@ -244,7 +244,7 @@ export default function ProfilePage() {
     const profile = profiles.find(p => p.id === profileId);
     if (!profile) return;
 
-    const currentItems = profile[field as keyof ProfileData] as string[];
+    const currentItems = (profile[field as keyof ProfileData] || []) as string[];
     const newItems = currentItems.includes(item)
       ? currentItems.filter(i => i !== item)
       : [...currentItems, item];
