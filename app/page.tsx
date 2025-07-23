@@ -90,7 +90,7 @@ export default function Home() {
         <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">프로필 선택</h3>
           <div className="flex flex-wrap gap-2">
-            {profiles.map(profile => (
+            {Array.isArray(profiles) && profiles.map(profile => (
               <button 
                 key={profile.id} 
                 onClick={() => toggleProfileSelection(profile.id)}
