@@ -242,9 +242,21 @@ export default function ProfilePage() {
   // 항목을 선택/해제하는 함수
   const toggleItem = (profileId: string, field: string, item: string) => {
     const profile = profiles.find(p => p.id === profileId);
-    if (!profile) return;
+    if (!profile) {
+      console.error(`Profile with ID ${profileId} not found.`);
+      return;
+    }
 
-    const currentItems = (profile[field as keyof ProfileData] || []) as string[];
+    let currentItems: string[];
+    const profileField = profile[field as keyof ProfileData];
+
+    if (Array.isArray(profileField)) {
+      currentItems = profileField as string[];
+    } else {
+      console.warn(`Field "${field}" on profile "${profileId}" is not an array. Initializing as empty.`);
+      currentItems = [];
+    }
+
     const newItems = currentItems.includes(item)
       ? currentItems.filter(i => i !== item)
       : [...currentItems, item];
