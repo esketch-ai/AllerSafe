@@ -1,5 +1,5 @@
 
-"""'use client';
+'use client';
 
 import Link from 'next/link';
 import TopNav from '@/components/TopNav';
@@ -181,4 +181,4 @@ export default function Home() {
     </div>
   );
 }
-""
+
